@@ -34,7 +34,7 @@
 							{{else if $.PageIsPullCommits}}
 								{{$commitShaLink = (printf "%s/pulls/%d/commits/%s" $commitRepoLink $.Issue.Index (PathEscape .ID.String))}}
 							{{else if $.Reponame}}
-								{{$commitShaLink = $.Repository.CommitLink .ID.String}}
+								{{$commitShaLink = ($.Repository.CommitLink .ID.String)}}
 							{{end}}
 							{{template "repo/shabox" (dict
 								"sha1" .ID.String
@@ -48,7 +48,7 @@
 							{{if $.PageIsWiki}}
 								<span class="commit-summary {{if gt .ParentCount 1}} grey text{{end}}" title="{{.Summary}}">{{.Summary | RenderEmoji $.Context}}</span>
 							{{else}}
-								{{$commitLink:= $.Repository.CommitLink .ID.String}}
+								{{$commitLink:= ($.Repository.CommitLink .ID.String)}}
 								{{if $.PageIsPullCommits}}
 									{{$commitLink = (printf "%s/pulls/%d/commits/%s" $commitRepoLink $.Issue.Index (PathEscape .ID.String))}}
 								{{end}}
