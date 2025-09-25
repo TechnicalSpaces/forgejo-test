@@ -243,7 +243,11 @@ func (n *Notification) HTMLURL(ctx context.Context) string {
 		}
 		return n.Issue.HTMLURL()
 	case NotificationSourceCommit:
-		return n.Repository.HTMLURL() + "/commit/" + url.PathEscape(n.CommitID)
+		commitURL := n.Repository.HTMLURL() + "/commit/" + url.PathEscape(n.CommitID)
+		if setting.Git.ForceFileOnlyCommitDiffs {
+			commitURL += "?file-only=true"
+		}
+		return commitURL
 	case NotificationSourceRepository:
 		return n.Repository.HTMLURL()
 	}
@@ -259,7 +263,11 @@ func (n *Notification) Link(ctx context.Context) string {
 		}
 		return n.Issue.Link()
 	case NotificationSourceCommit:
-		return n.Repository.Link() + "/commit/" + url.PathEscape(n.CommitID)
+		commitURL := n.Repository.Link() + "/commit/" + url.PathEscape(n.CommitID)
+		if setting.Git.ForceFileOnlyCommitDiffs {
+			commitURL += "?file-only=true"
+		}
+		return commitURL
 	case NotificationSourceRepository:
 		return n.Repository.Link()
 	}

@@ -10,6 +10,7 @@ import (
 
 	"forgejo.org/models/repo"
 	"forgejo.org/modules/git"
+	"forgejo.org/modules/setting"
 	"forgejo.org/modules/util"
 	"forgejo.org/services/context"
 
@@ -45,10 +46,14 @@ func ShowFileFeed(ctx *context.Context, repo *repo.Repository, formatType string
 	}
 
 	for _, commit := range commits {
+		commitURL := repo.HTMLURL() + "/commit/" + commit.ID.String()
+		if setting.Git.ForceFileOnlyCommitDiffs {
+			commitURL += "?file-only=true"
+		}
 		feed.Items = append(feed.Items, &feeds.Item{
 			Id:    commit.ID.String(),
 			Title: strings.TrimSpace(strings.Split(commit.Message(), "\n")[0]),
-			Link:  &feeds.Link{Href: repo.HTMLURL() + "/commit/" + commit.ID.String()},
+			Link:  &feeds.Link{Href: commitURL},
 			Author: &feeds.Author{
 				Name:  commit.Author.Name,
 				Email: commit.Author.Email,
