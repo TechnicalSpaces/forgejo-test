@@ -216,8 +216,12 @@ func feedActionsToFeedItems(ctx *context.Context, actions activities_model.Actio
 					if len(desc) != 0 {
 						desc += "\n\n"
 					}
+					commitURL := fmt.Sprintf("%s/commit/%s", act.GetRepoAbsoluteLink(ctx), commit.Sha1)
+					if setting.Git.ForceFileOnlyCommitDiffs {
+						commitURL += "?file-only=true"
+					}
 					desc += fmt.Sprintf("<a href=\"%s\">%s</a>\n%s",
-						html.EscapeString(fmt.Sprintf("%s/commit/%s", act.GetRepoAbsoluteLink(ctx), commit.Sha1)),
+						html.EscapeString(commitURL),
 						commit.Sha1,
 						templates.RenderCommitMessage(ctx, commit.Message, nil),
 					)
@@ -226,7 +230,11 @@ func feedActionsToFeedItems(ctx *context.Context, actions activities_model.Actio
 				if push.Len > 1 {
 					link = &feeds.Link{Href: fmt.Sprintf("%s/%s", setting.AppSubURL, push.CompareURL)}
 				} else if push.Len == 1 {
-					link = &feeds.Link{Href: fmt.Sprintf("%s/commit/%s", act.GetRepoAbsoluteLink(ctx), push.Commits[0].Sha1)}
+					commitURL := fmt.Sprintf("%s/commit/%s", act.GetRepoAbsoluteLink(ctx), push.Commits[0].Sha1)
+					if setting.Git.ForceFileOnlyCommitDiffs {
+						commitURL += "?file-only=true"
+					}
+					link = &feeds.Link{Href: commitURL}
 				}
 
 			case activities_model.ActionCreateIssue, activities_model.ActionCreatePullRequest:

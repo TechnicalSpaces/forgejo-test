@@ -30,6 +30,7 @@ var Git = struct {
 	LargeObjectThreshold      int64
 	DisableCoreProtectNTFS    bool
 	DisablePartialClone       bool
+	ForceFileOnlyCommitDiffs  bool
 	Timeout                   struct {
 		Default int
 		Migrate int
@@ -53,6 +54,7 @@ var Git = struct {
 	PullRequestPushMessage:    true,
 	LargeObjectThreshold:      1024 * 1024,
 	DisablePartialClone:       false,
+	ForceFileOnlyCommitDiffs:  false,
 	Timeout: struct {
 		Default int
 		Migrate int

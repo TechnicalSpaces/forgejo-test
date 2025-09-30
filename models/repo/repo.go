@@ -347,6 +347,9 @@ func (repo *Repository) CommitLink(commitID string) (result string) {
 		result = ""
 	} else {
 		result = repo.Link() + "/commit/" + url.PathEscape(commitID)
+		if setting.Git.ForceFileOnlyCommitDiffs {
+			result += "?file-only=true"
+		}
 	}
 	return result
 }
